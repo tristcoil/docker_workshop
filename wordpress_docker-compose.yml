@@ -1,0 +1,95 @@
+version: '3.1'
+
+# this docker file builds 2 wordpress websites:
+# app_1.example and app_2.example
+# each site has its own database
+
+# source paths to files or directories
+# are relative to location of docker.compose.yml file
+
+# functionality of docker secrets should 
+# be used to protect passwords
+
+services:
+ 
+ nginx_proxy:
+    container_name: nginx_proxy
+    image: jwilder/nginx-proxy
+    depends_on:
+     - wordpress_app_1
+     - wordpress_app_2
+    ports:
+     - 80:80
+    volumes:
+     - /var/run/docker.sock:/tmp/docker.sock:ro       
+
+
+ wordpress_app_1:
+    container_name: wordpress_app_1
+    image: wordpress
+    depends_on:
+     - mariadb_app_1
+    links:
+     - mariadb_app_1:mysql
+    environment:
+     - WORDPRESS_DB_USER=wp
+     - WORDPRESS_DB_NAME=wp
+     - WORDPRESS_DB_PASSWORD=UseSecretInstead
+     - WORDPRESS_DB_HOST=mariadb_app_1 
+     - VIRTUAL_HOST=app_1.example 
+    ports:
+     - "80"
+    volumes:
+     - ./html_app_1:/var/www/html    
+     
+    
+ mariadb_app_1:
+    container_name: mariadb_app_1
+    image: mariadb
+    environment:
+     - MYSQL_USER=wp
+     - MYSQL_DATABASE=wp
+     - MYSQL_PASSWORD=UseSecretInstead
+     - MYSQL_ROOT_PASSWORD=UseSecretInstead   
+    volumes:
+     - ./database_app_1:/var/lib/mysql     
+       
+    
+ wordpress_app_2:
+    container_name: wordpress_app_2
+    image: wordpress
+    depends_on:
+     - mariadb_app_2
+    container_name: wordpress_app_2
+    links:
+     - mariadb_app_2:mysql
+    environment:
+     - WORDPRESS_DB_USER=wp
+     - WORDPRESS_DB_NAME=wp
+     - WORDPRESS_DB_PASSWORD=UseSecretInstead
+     - WORDPRESS_DB_HOST=mariadb_app_2 
+     - VIRTUAL_HOST=app_2.example 
+    ports:
+     - "80"
+    volumes:
+     - ./html_app_2:/var/www/html
+
+ mariadb_app_2:
+    container_name: mariadb_app_2
+    image: mariadb
+    environment:
+     - MYSQL_USER=wp
+     - MYSQL_DATABASE=wp
+     - MYSQL_PASSWORD=UseSecretInstead
+     - MYSQL_ROOT_PASSWORD=UseSecretInstead                
+    volumes:
+     - ./database_app_2:/var/lib/mysql
+     
+
+ 
+#secrets:
+#  dbpassword:
+#     file: dbpassword.txt
+#  dbrootpassword:
+#     file: dbrootpassword.txt
+

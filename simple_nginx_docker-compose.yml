@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  nginx-proxy:
+    container_name: nginx-proxy
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  app_1:
+    container_name: app_1
+    image: katacoda/docker-http-server
+    ports:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=app_1.example
+      
+  app_2:
+    container_name: app_2
+    image: katacoda/docker-http-server
+    ports:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=app_2.example      

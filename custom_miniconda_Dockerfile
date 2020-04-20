@@ -18,8 +18,10 @@ RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
 # install in batch (-b silent) mode, does not edit PATH or .bashrc or .bash_profile
 RUN bash Miniconda3-latest-Linux-x86_64.sh -b
 
-# add miniconda to PATH 
+# add miniconda to PATH / path troubleshooting
 ENV PATH=/root/miniconda3/bin:${PATH} 
+RUN PATH=/root/miniconda3/bin:${PATH}
+RUN echo $PATH
 
 # install python libraries that we need
 RUN conda update -y conda

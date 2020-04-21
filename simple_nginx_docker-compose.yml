@@ -10,17 +10,17 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
   app_1:
-    container_name: app_1
+    container_name: app-1
     image: katacoda/docker-http-server
     ports:
       - "80"
     environment:
-      - VIRTUAL_HOST=app_1.example
+      - VIRTUAL_HOST=app-1.example
       
   app_2:
-    container_name: app_2
+    container_name: app-2
     image: katacoda/docker-http-server
     ports:
       - "80"
     environment:
-      - VIRTUAL_HOST=app_2.example      
+      - VIRTUAL_HOST=app-2.example      

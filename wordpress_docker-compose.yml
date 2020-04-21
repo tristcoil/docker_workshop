@@ -36,7 +36,7 @@ services:
      - WORDPRESS_DB_NAME=wp
      - WORDPRESS_DB_PASSWORD=UseSecretInstead
      - WORDPRESS_DB_HOST=mariadb_app_1 
-     - VIRTUAL_HOST=app_1.example 
+     - VIRTUAL_HOST=app-1.example 
     ports:
      - "80"
     volumes:
@@ -68,7 +68,7 @@ services:
      - WORDPRESS_DB_NAME=wp
      - WORDPRESS_DB_PASSWORD=UseSecretInstead
      - WORDPRESS_DB_HOST=mariadb_app_2 
-     - VIRTUAL_HOST=app_2.example 
+     - VIRTUAL_HOST=app-2.example 
     ports:
      - "80"
     volumes:
@@ -86,7 +86,6 @@ services:
      - ./database_app_2:/var/lib/mysql
      
 
- 
 #secrets:
 #  dbpassword:
 #     file: dbpassword.txt

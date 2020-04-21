@@ -1,0 +1,53 @@
+version: '3.3'
+
+# run as
+# docker-compose --compatibility up
+# otherwise containers do not scale
+
+# docker kill/stop <container name> 
+# prevents start of container
+# with restart: always directive
+# to test, stop container from within
+
+services:
+  nginx-proxy:
+    container_name: nginx-proxy
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: always
+      
+      
+  app-1:
+    #replicas do not like container_name directive
+    #container_name: app-1  
+    #web server, prints name of container
+    image: katacoda/docker-http-server     
+    ports:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=app-1.example
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 3
+      
+  app-2:
+    #container_name: app-2
+    image: katacoda/docker-http-server
+    ports:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=app-2.example     
+      
+  crash:
+    #  just starts, does nothing and exits
+    container_name: crash
+    image: centos:7
+    restart: always  
+             # "no"
+             # on-failure
+             # unless-stopped
+      
